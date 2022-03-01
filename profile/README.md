@@ -2,6 +2,16 @@
 
 <h1 align="center">The Dragon Code</h1>
 
+> ATTENTION!
+>
+> In the course of recent events between Russia and Ukraine, unconfirmed information has appeared that Microsoft, which owns GitHub, is considering cutting off Russian developers from its resources.
+>
+> My access may be blocked and I do not know what will happen to the created repositories.
+>
+> Peace for everyone. No War!
+>
+> Best Regards, Andrey Helldar
+
 The Dragon Code are powerful functional solutions with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. The Dragon Code packages takes the pain out of development by easing common tasks used in many web projects, such as:
 
 - Performing [actions](https://github.com/TheDragonCode/laravel-migration-actions) during deployment

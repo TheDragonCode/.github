@@ -15,18 +15,10 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     extensions: curl, mbstring, zip, pcntl, pdo, pdo_sqlite, iconv
-
-            -   name: Set Up
-                run:  |
-                    mkdir -p ~/.ssh
-                    chmod 700 ~/.ssh
-                    echo ${{ secrets.DEPLOY_PRIVATE_KEY }} >> ~/.ssh/id_rsa
-                    chmod 600 ~/.ssh/id_rsa
-                    ssh-keyscan ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
-                    chmod 600 ~/.ssh/known_hosts
-
-            -   name: Install dependencies
-                run: composer global require deployer/deployer:^v7.0.0-rc.6
+                    tools: deployer:^v7.0.0-rc.6
 
             -   name: Deploy
-                run: dep deploy production --revision=${{ github.sha }}
+                uses: deployphp/action@v1
+                with:
+                    private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+                    dep: deploy production --revision=${{ github.sha }}

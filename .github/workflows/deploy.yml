@@ -22,7 +22,7 @@ jobs:
                     chmod 700 ~/.ssh
                     echo ${{ secrets.DEPLOY_PRIVATE_KEY }} >> ~/.ssh/id_rsa
                     chmod 600 ~/.ssh/id_rsa
-                    echo "StrictHostKeyChecking no" >> ~/.ssh/known_hosts
+                    ssh-keyscan ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
                     chmod 600 ~/.ssh/known_hosts
 
             -   name: Install dependencies

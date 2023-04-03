@@ -14,6 +14,6 @@ The Dragon Code are powerful functional solutions with expressive, elegant synta
 - Easy redefinition of all [responses](https://github.com/TheDragonCode/laravel-json-response) in JSON (for restful api)
 - and much more.
 
-We also have a [service](https://dragon-code.pro) where you can choose a preview for your repository.
+We also have a [service](https://preview.dragon-code.pro) where you can choose a preview for your repository.
 
 [![the dragon code](https://preview.dragon-code.pro/the-dragon-code/powerful-web.svg?mode=dark)](https://dragon-code.pro)

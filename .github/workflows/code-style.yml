@@ -1,4 +1,4 @@
-name: code-style
+name: Code Style
 
 on:
     workflow_call:
@@ -7,19 +7,42 @@ on:
                 required: true
                 type: string
             fix:
-                required: true
+                required: false
                 type: boolean
+                default: false
+            editorconfig:
+                required: false
+                type: boolean
+                default: false
+            dependabot:
+                required: false
+                type: boolean
+                default: false
+            normalize:
+                required: false
+                type: boolean
+                default: false
 
 jobs:
-    download:
+    style:
         runs-on: ubuntu-latest
 
         steps:
             -   name: Checkout code
                 uses: actions/checkout@v3
 
-            -   name: Checking PHP Syntax
-                uses: TheDragonCode/codestyler@v2.6.2
+            -   name: Detect job name
+                id: detect
+                run: |
+                    [[ ${{ inputs.fix }} ]] && NAME="Fix" || NAME="Check"
+                    
+                    echo "name=${NAME}" >> $GITHUB_OUTPUT
+
+            -   name: ${{ steps.detect.outputs.name }} the code style
+                uses: TheDragonCode/codestyler@v3
                 with:
                     github_token: ${{ inputs.token }}
                     fix: ${{ inputs.fix }}
+                    editorconfig: ${{ inputs.editorconfig }}
+                    dependabot: ${{ inputs.dependabot }}
+                    normalize: ${{ inputs.normalize }}

@@ -22,4 +22,4 @@ jobs:
                     private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
                     known-hosts: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
                     dep: deploy production --revision=${{ github.sha }}
-                    deployer-version: 7.2.0
+                    deployer-version: 7.3.0

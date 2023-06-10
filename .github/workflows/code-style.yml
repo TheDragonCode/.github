@@ -13,15 +13,15 @@ on:
             editorconfig:
                 required: false
                 type: boolean
-                default: false
+                default: true
             dependabot:
                 required: false
                 type: boolean
-                default: false
+                default: true
             normalize:
                 required: false
                 type: boolean
-                default: false
+                default: true
 
 jobs:
     style:

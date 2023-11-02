@@ -19,8 +19,6 @@ We also have Telegram channels where we post announcements:
 - [English](https://t.me/dragon_code_news_en)
 - [Русский](https://t.me/dragon_code_news)
 
-You can also select the news channels you need from the [Telegram folder](https://t.me/addlist/FKmP70KKc7g2ZWMy).
-
 And we have a [service](https://preview.dragon-code.pro) where you can choose a preview for your repository.
 
 [![the dragon code](https://preview.dragon-code.pro/the-dragon-code/powerful-web.svg?preposition=with)](https://dragon-code.pro)

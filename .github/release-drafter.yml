@@ -1,6 +1,6 @@
 name-template: '$RESOLVED_VERSION'
 tag-template: '$RESOLVED_VERSION'
-change-template: '- $TITLE by @$AUTHOR (#$NUMBER)'
+change-template: '- $TITLE by @$AUTHOR in #$NUMBER'
 category-template: '## $TITLE'
 
 sort-by: 'title'
@@ -12,13 +12,18 @@ categories:
   - title: 'Added'
     labels:
       - 'added'
+  - title: 'Changed'
+  - title: 'Machine translations'
+    collapse-after: 20
+    labels:
+      - 'machine'
+  - title: 'Removed'
+    labels:
+      - 'removed'
   - title: 'Fixed'
     labels:
       - 'fix'
       - 'bug'
-  - title: 'Removed'
-    labels:
-      - 'removed'
   - title: 'Dependencies'
     collapse-after: 10
     labels:
@@ -36,12 +41,12 @@ version-resolver:
   major:
     labels:
       - 'major'
+      - 'removed'
   minor:
     labels:
       - 'minor'
+      - 'added'
+      - 'feature'
   default: patch
 
-template: |
-  ## Changed
-
-  $CHANGES
+template: $CHANGES

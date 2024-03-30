@@ -2,6 +2,10 @@ name: Release Drafter
 
 on:
   workflow_call:
+    outputs:
+      tag_name:
+        description: "Tag name"
+        value: ${{ jobs.update_release_draft.outputs.tag_name }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

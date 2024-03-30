@@ -1,8 +1,6 @@
-<p align="center"><a href="https://dragon-code.pro" target="_blank"><img src="https://dragon-code.pro/images/dragon.svg" width="240"></a></p>
+<p align="center"><a href="https://dragon-code.pro" target="_blank"><img src="https://raw.githubusercontent.com/TheDragonCode/art/main/logo-type/the-dragon-code-logo.svg" width="640"></a></p>
 
-<h1 align="center">The Dragon Code</h1>
-
-The Dragon Code are powerful functional solutions with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. The Dragon Code packages takes the pain out of development by easing common tasks used in many web projects, such as:
+**The Dragon Code** are powerful functional solutions with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. The Dragon Code packages takes the pain out of development by easing common tasks used in many web projects, such as:
 
 - Performing [actions](https://github.com/TheDragonCode/laravel-migration-actions) during deployment
 - Providing [JSON responses](https://github.com/TheDragonCode/api-response) in a unified way

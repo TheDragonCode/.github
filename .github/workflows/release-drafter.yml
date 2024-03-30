@@ -16,7 +16,11 @@ jobs:
     name: Release Draft
     runs-on: ubuntu-latest
 
+    outputs:
+      tag_name: ${{ steps.draft.outputs.tag_name }}
+
     steps:
       - uses: release-drafter/release-drafter@v6
+        id: draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -17,10 +17,10 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      tag_name: ${{ steps.draft.outputs.tag_name }}
+      tag_name: ${{ steps.release_drafter.outputs.tag_name }}
 
     steps:
       - uses: release-drafter/release-drafter@v6
-        id: draft
+        id: release_drafter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

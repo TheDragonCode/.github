@@ -5,7 +5,7 @@ on:
     outputs:
       tag_name:
         description: "Tag name"
-        value: ${{ jobs.update_release_draft.outputs.tag_name }}
+        value: ${{ jobs.draft.outputs.tag_name }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -16,14 +16,15 @@ permissions:
   pull-requests: write
 
 jobs:
-  update_release_draft:
+  draft:
     name: Release Draft
     runs-on: ubuntu-latest
 
     outputs:
-      tag_name: ${{ steps.release_drafter.outputs.tag_name }}
+      tag_name: ${{ steps.drafter.outputs.tag_name }}
 
     steps:
-      - uses: release-drafter/release-drafter@v6
+      - id: drafter
+        uses: release-drafter/release-drafter@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

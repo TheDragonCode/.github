@@ -33,10 +33,14 @@ categories:
       - 'security'
       - 'security fix'
       - 'security vulnerability'
+  - title: Builds
+    labels:
+      - 'build'
 
 exclude-labels:
   - 'skip-changelog'
   - 'github_actions'
+  - 'dependabot'
 
 version-resolver:
   major:

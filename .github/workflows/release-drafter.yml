@@ -23,7 +23,3 @@ jobs:
       - uses: release-drafter/release-drafter@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
-        env:
-          GITHUB_ACTION_PATH: ${{ github.action_path }}

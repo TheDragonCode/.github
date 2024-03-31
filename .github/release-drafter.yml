@@ -13,10 +13,6 @@ categories:
     labels:
       - 'added'
   - title: 'Changed'
-  - title: 'Machine translations'
-    collapse-after: 20
-    labels:
-      - 'machine'
   - title: 'Removed'
     labels:
       - 'removed'
@@ -24,6 +20,10 @@ categories:
     labels:
       - 'fix'
       - 'bug'
+  - title: 'Machine translations'
+    collapse-after: 20
+    labels:
+      - 'machine'
   - title: 'Dependencies'
     collapse-after: 10
     labels:
@@ -40,7 +40,9 @@ categories:
 exclude-labels:
   - 'skip-changelog'
   - 'github_actions'
+  - 'code-style'
   - 'dependabot'
+  - 'statuses'
 
 version-resolver:
   major:

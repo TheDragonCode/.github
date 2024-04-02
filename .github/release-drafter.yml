@@ -33,9 +33,6 @@ categories:
       - 'security'
       - 'security fix'
       - 'security vulnerability'
-  - title: Builds
-    labels:
-      - 'build'
 
 exclude-labels:
   - 'skip-changelog'
@@ -43,6 +40,7 @@ exclude-labels:
   - 'code-style'
   - 'dependabot'
   - 'statuses'
+  - 'build'
 
 version-resolver:
   major:

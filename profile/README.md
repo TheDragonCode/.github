@@ -2,7 +2,7 @@
 
 **The Dragon Code** are powerful functional solutions with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. The Dragon Code packages takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- Performing [actions](https://github.com/TheDragonCode/laravel-migration-actions) during deployment
+- Performing [deploy operations](https://github.com/TheDragonCode/laravel-deploy-operations) during deployment
 - Providing [JSON responses](https://github.com/TheDragonCode/api-response) in a unified way
 - [Extending](https://github.com/TheDragonCode/extended-routes) resource routes
 - Help with [migrating](https://github.com/TheDragonCode/migrate-db) to another database

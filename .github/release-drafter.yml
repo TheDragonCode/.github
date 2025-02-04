@@ -6,7 +6,7 @@ category-template: '## $TITLE'
 sort-by: 'title'
 sort-direction: 'ascending'
 
-include-pre-releases: true
+include-pre-releases: false
 
 categories:
   - title: 'Added'

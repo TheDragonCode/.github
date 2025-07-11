@@ -20,7 +20,7 @@ jobs:
                     coverage: none
 
             -   name: Install dependency
-                run: composer global require dragon-code/codestyler
+                run: composer global require dragon-code/codestyler:^5.0
 
             -   name: Check the code-style
                 run: codestyle --test
@@ -52,7 +52,7 @@ jobs:
 
             -   name: Install dependencies
                 run: |
-                    composer global require dragon-code/codestyler
+                    composer global require dragon-code/codestyler:^5.0
                     composer global require ergebnis/composer-normalize
 
             -   name: Fix the code-style

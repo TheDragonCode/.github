@@ -94,7 +94,9 @@ jobs:
 
             -   name: Remove package.json
                 if: ${{ env.HAS_PACKAGE_JSON == '0' }}
-                run: rm package.json
+                run: |
+                    rm package.json
+                    rm package-lock.json
 
             -   name: Create a Pull Request
                 uses: peter-evans/create-pull-request@v7

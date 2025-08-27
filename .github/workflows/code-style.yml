@@ -1,67 +1,100 @@
 on:
     workflow_call:
 
+permissions: write-all
+
 jobs:
-    check:
+    Check:
         runs-on: ubuntu-latest
         
         if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/main' }}
 
-        name: Check
-
         steps:
-            -   name: Checkout code
-                uses: actions/checkout@v5
+            -   uses: actions/checkout@v5
+            -   uses: shivammathur/setup-php@v2
 
-            -   name: Setup PHP
-                uses: shivammathur/setup-php@v2
+            -   uses: actions/setup-node@v4
                 with:
-                    extensions: curl, mbstring, zip, pcntl, pdo, pdo_sqlite, iconv, json
-                    coverage: none
+                    node-version: 'latest'
 
-            -   name: Install dependency
-                run: composer global require dragon-code/codestyler:^5.0
+            -   name: Install Composer dependencies
+                run: composer global require dragon-code/codestyler
 
-            -   name: Check the code-style
-                run: codestyle --test
+            -   name: Install Node dependencies
+                run: npm i -D @biomejs/biome
 
-    fix:
+            -   name: Publish config files
+                run: |
+                    codestyle pint 8.2
+                    codestyle npm
+
+            -   name: PHP code-style
+                run: pint --parallel --test
+
+            -   name: Node code-style
+                run: |
+                    npx @biomejs/biome lint
+                    npx @biomejs/biome format
+
+    Fix:
         runs-on: ubuntu-latest
         
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
-        name: Fix
-
         steps:
-            -   name: Checkout code
-                uses: actions/checkout@v5
+            -   uses: actions/checkout@v5
+            -   uses: shivammathur/setup-php@v2
 
-            -   name: Setup PHP
-                uses: shivammathur/setup-php@v2
+            -   uses: actions/setup-node@v4
                 with:
-                    extensions: curl, mbstring, zip, pcntl, pdo, pdo_sqlite, iconv, json
-                    coverage: none
+                    node-version: 'latest'
+
+            -   name: Detect package.json
+                id: has_pkg
+                shell: bash
+                run: |
+                    if [ -f package.json ]; then
+                      echo "HAS_PACKAGE_JSON=1" >> "$GITHUB_ENV"
+                    else
+                      echo "HAS_PACKAGE_JSON=0" >> "$GITHUB_ENV"
+                    fi
 
             -   name: Setup Composer
                 run: |
-                    composer global config --no-plugins allow-plugins.dragon-code/codestyler true
+                    composer global config --no-plugins allow-plugins.laravel/pint true
                     composer global config --no-plugins allow-plugins.ergebnis/composer-normalize true
                     
-                    composer config --no-plugins allow-plugins.dragon-code/codestyler true
+                    composer config --no-plugins allow-plugins.laravel/pint true
                     composer config --no-plugins allow-plugins.ergebnis/composer-normalize true
 
-            -   name: Install dependencies
-                run: |
-                    composer global require dragon-code/codestyler:^5.0
-                    composer global require ergebnis/composer-normalize
+            -   name: Install Composer dependencies
+                run: composer global require dragon-code/codestyler
 
-            -   name: Fix the code-style
-                run: |
-                    codestyle dependabot
-                    codestyle editorconfig
-                    codestyle
+            -   name: Install Node dependencies
+                run: npm i -D @biomejs/biome
 
-                    composer normalize
+            -   name: Publish config files
+                run: |
+                    codestyle pint 8.2
+                    codestyle npm
+
+            -   name: Normalize composer.json
+                run: composer normalize
+
+            -   name: PHP code-style
+                run: pint --parallel
+
+            -   name: Node code-style
+                run: |
+                    npx @biomejs/biome lint --write
+                    npx @biomejs/biome format --write
+
+            -   name: Remove node_modules
+                run: rm -rf node_modules
+
+            -   name: Remove package.json
+                if: ${{ env.HAS_PACKAGE_JSON == '0' }}
+                run: rm package.json
 
             -   name: Create a Pull Request
                 uses: peter-evans/create-pull-request@v7

@@ -35,12 +35,12 @@ jobs:
                 run: codestyle pint 8.2
 
             -   name: Normalize composer.json
-                if: ${{ env.CAN_FIX }} == true
+                if: $CAN_FIX == true
                 run: composer normalize
 
             -   name: Code-style
                 run: |
-                    if [ ${{ env.CAN_FIX }} == true ]; then
+                    if [ $CAN_FIX == true ]; then
                         pint --parallel
                     else
                         pint --parallel --test
@@ -87,7 +87,7 @@ jobs:
 
             -   name: Code-style
                 run: |
-                    if [ ${{ env.CAN_FIX }} == true ]; then
+                    if [ $CAN_FIX == true ]; then
                         npx @biomejs/biome lint --write
                         npx @biomejs/biome format --write
                     else
@@ -96,11 +96,11 @@ jobs:
                     fi
 
             -   name: Remove node_modules
-                if: ${{ env.CAN_FIX == true }}
+                if: $CAN_FIX == true
                 run: rm -rf node_modules
 
             -   name: Remove package.json
-                if: ${{ env.HAS_PACKAGE_JSON == '0' }}
+                if: env.HAS_PACKAGE_JSON == '0'
                 run: |
                     rm package.json
                     rm package-lock.json
@@ -113,7 +113,7 @@ jobs:
         name: Create a PR
         runs-on: ubuntu-latest
         
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
         steps:
             -   uses: actions/checkout@v5

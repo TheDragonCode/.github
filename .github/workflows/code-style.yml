@@ -53,18 +53,19 @@ jobs:
                     git config --global --add safe.directory "$GITHUB_WORKSPACE"
                     git ls-files -m > changed.txt || true
 
-                    if [ -s changed.txt ]; then
-                      echo "files<<EOF" >> "$GITHUB_OUTPUT"
-                      cat changed.txt >> "$GITHUB_OUTPUT"
-                      echo "EOF" >> "$GITHUB_OUTPUT"
-                    fi
+                    mkdir -p .artifacts
+                    while IFS= read -r f; do
+                      [ -f "$f" ] || continue
+                      mkdir -p ".artifacts/$(dirname "$f")"
+                      cp "$f" ".artifacts/$f"
+                    done < changed.txt
 
             -  name: Upload changed files
                if: env.CAN_FIX == 'true' && steps.changed_php.outputs.files != ''
                uses: actions/upload-artifact@v4
                with:
                  name: fixes-php
-                 path: ${{ steps.changed_php.outputs.files }}
+                 path: .artifacts
 
     node:
         name: Node
@@ -132,18 +133,19 @@ jobs:
                     git config --global --add safe.directory "$GITHUB_WORKSPACE"
                     git ls-files -m > changed.txt || true
 
-                    if [ -s changed.txt ]; then
-                      echo "files<<EOF" >> "$GITHUB_OUTPUT"
-                      cat changed.txt >> "$GITHUB_OUTPUT"
-                      echo "EOF" >> "$GITHUB_OUTPUT"
-                    fi
+                    mkdir -p .artifacts
+                    while IFS= read -r f; do
+                      [ -f "$f" ] || continue
+                      mkdir -p ".artifacts/$(dirname "$f")"
+                      cp "$f" ".artifacts/$f"
+                    done < changed.txt
 
             -  name: Upload changed files
                if: env.CAN_FIX == 'true' && steps.changed_node.outputs.files != ''
                uses: actions/upload-artifact@v4
                with:
                  name: fixes-node
-                 path: ${{ steps.changed_node.outputs.files }}
+                 path: .artifacts
 
     pr:
         needs:

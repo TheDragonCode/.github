@@ -51,25 +51,25 @@ jobs:
                 id: changed_php
                 shell: bash
                 run: |
-                  git config --global --add safe.directory "$GITHUB_WORKSPACE"
-                  git ls-files -m > changed.txt || true
+                    git config --global --add safe.directory "$GITHUB_WORKSPACE"
+                    git ls-files -m > changed.txt || true
 
-                  if [ -s changed.txt ]; then
-                    echo "has_changes=true" >> "$GITHUB_OUTPUT"
-                  else
-                    echo "has_changes=false" >> "$GITHUB_OUTPUT"
-                  fi
+                    if [ -s changed.txt ]; then
+                        echo "has_changes=true" >> "$GITHUB_OUTPUT"
+                    else
+                        echo "has_changes=false" >> "$GITHUB_OUTPUT"
+                    fi
 
             -   name: Stage changed files preserving paths
                 if: env.CAN_FIX == 'true' && steps.changed_php.outputs.has_changes == 'true'
                 shell: bash
                 run: |
-                  mkdir -p .artifacts/php
-                  while IFS= read -r f; do
-                    [ -f "$f" ] || continue
-                    mkdir -p ".artifacts/php/$(dirname "$f")"
-                    cp "$f" ".artifacts/php/$f"
-                  done < changed.txt
+                    mkdir -p .artifacts/php
+                    while IFS= read -r f; do
+                        [ -f "$f" ] || continue
+                        mkdir -p ".artifacts/php/$(dirname "$f")"
+                        cp "$f" ".artifacts/php/$f"
+                    done < changed.txt
 
             -  name: Upload changed files
                if: env.CAN_FIX == 'true' && steps.changed_php.outputs.has_changes == 'true'
@@ -142,25 +142,25 @@ jobs:
                 id: changed_node
                 shell: bash
                 run: |
-                  git config --global --add safe.directory "$GITHUB_WORKSPACE"
-                  git ls-files -m > changed.txt || true
+                    git config --global --add safe.directory "$GITHUB_WORKSPACE"
+                    git ls-files -m > changed.txt || true
 
-                  if [ -s changed.txt ]; then
-                    echo "has_changes=true" >> "$GITHUB_OUTPUT"
-                  else
-                    echo "has_changes=false" >> "$GITHUB_OUTPUT"
-                  fi
+                    if [ -s changed.txt ]; then
+                        echo "has_changes=true" >> "$GITHUB_OUTPUT"
+                    else
+                        echo "has_changes=false" >> "$GITHUB_OUTPUT"
+                    fi
 
             -   name: Stage changed files preserving paths
                 if: env.CAN_FIX == 'true' && steps.changed_node.outputs.has_changes == 'true'
                 shell: bash
                 run: |
-                  mkdir -p .artifacts/node
-                  while IFS= read -r f; do
-                    [ -f "$f" ] || continue
-                    mkdir -p ".artifacts/node/$(dirname "$f")"
-                    cp "$f" ".artifacts/node/$f"
-                  done < changed.txt
+                    mkdir -p .artifacts/node
+                    while IFS= read -r f; do
+                        [ -f "$f" ] || continue
+                        mkdir -p ".artifacts/node/$(dirname "$f")"
+                        cp "$f" ".artifacts/node/$f"
+                    done < changed.txt
 
             -  name: Upload changed files
                if: env.CAN_FIX == 'true' && steps.changed_node.outputs.has_changes == 'true'

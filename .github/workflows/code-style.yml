@@ -12,12 +12,13 @@ jobs:
             -   uses: actions/checkout@v5
             -   uses: shivammathur/setup-php@v2
 
-            -   name: Can fix detect
+            -   name: Detecting to make changes
                 id: can_fix
                 shell: bash
                 run: |
                     CAN_FIX=${{ github.event_name == 'push' && github.ref == 'refs/heads/1.x' }}
-                    
+
+                    echo "$CAN_FIX"
                     echo "CAN_FIX=${CAN_FIX}" >> "$GITHUB_ENV"
 
             -   name: Setup Composer
@@ -78,7 +79,7 @@ jobs:
                 with:
                     node-version: 'latest'
 
-            -   name: Can fix detect
+            -   name: Detecting to make changes
                 id: can_fix
                 shell: bash
                 run: |

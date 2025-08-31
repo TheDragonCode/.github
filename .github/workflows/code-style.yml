@@ -16,9 +16,9 @@ jobs:
                 id: can_fix
                 shell: bash
                 run: |
-                    CAN_FIX: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+                    CAN_FIX=${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
                     
-                    echo "enabled=${CAN_FIX}" >> "$GITHUB_OUTPUT"
+                    echo "CAN_FIX=${CAN_FIX}" >> "$GITHUB_ENV"
 
             -   name: Setup Composer
                 run: |
@@ -35,15 +35,15 @@ jobs:
                 run: codestyle pint 8.2
 
             -   name: Normalize composer.json
-                if: ${{ steps.can_fix.outputs.enabled == '1' }}
+                if: ${{ env.CAN_FIX }}
                 run: composer normalize
 
             -   name: Fix PHP code-style
-                if: ${{ steps.can_fix.outputs.enabled == '1' }}
+                if: ${{ env.CAN_FIX }}
                 run: pint --parallel
 
             -   name: Check PHP code-style
-                if: ${{ steps.can_fix.outputs.enabled == '0' }}
+                if: ${{ env.CAN_FIX }} == false
                 run: pint --parallel --test
 
     node:
@@ -62,9 +62,9 @@ jobs:
                 id: can_fix
                 shell: bash
                 run: |
-                    CAN_FIX: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+                    CAN_FIX=${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
                     
-                    echo "enabled=${CAN_FIX}" >> "$GITHUB_OUTPUT"
+                    echo "CAN_FIX=${CAN_FIX}" >> "$GITHUB_ENV"
 
             -   name: Detect package.json
                 id: has_pkg
@@ -86,19 +86,19 @@ jobs:
                 run: codestyle npm
 
             -   name: Node code-style
-                if: ${{ steps.can_fix.outputs.enabled == '1' }}
+                if: ${{ env.CAN_FIX }}
                 run: |
                     npx @biomejs/biome lint --write
                     npx @biomejs/biome format --write
 
             -   name: Node code-style
-                if: ${{ steps.can_fix.outputs.enabled == '0' }}
+                if: ${{ env.CAN_FIX }} == false
                 run: |
                     npx @biomejs/biome lint
                     npx @biomejs/biome format
 
             -   name: Remove node_modules
-                if: ${{ steps.can_fix.outputs.enabled == '1' }}
+                if: ${{ env.CAN_FIX }}
                 run: rm -rf node_modules
 
             -   name: Remove package.json

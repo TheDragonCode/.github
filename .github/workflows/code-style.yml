@@ -46,6 +46,26 @@ jobs:
                         pint --parallel --test
                     fi
 
+            -   name: Collect changed files
+                if: env.CAN_FIX == true
+                id: changed_php
+                run: |
+                    git config --global --add safe.directory "$GITHUB_WORKSPACE"
+                    git ls-files -m > changed.txt || true
+
+                    if [ -s changed.txt ]; then
+                      echo "files<<EOF" >> "$GITHUB_OUTPUT"
+                      cat changed.txt >> "$GITHUB_OUTPUT"
+                      echo "EOF" >> "$GITHUB_OUTPUT"
+                    fi
+
+            -  name: Upload changed files
+               if: env.CAN_FIX == true && steps.changed_php.outputs.files != ''
+               uses: actions/upload-artifact@v4
+               with:
+                 name: fixes-php
+                 path: ${{ steps.changed_php.outputs.files }}
+
     node:
         name: Node
         runs-on: ubuntu-latest
@@ -105,6 +125,26 @@ jobs:
                     rm package.json
                     rm package-lock.json
 
+            -   name: Collect changed files
+                if: env.CAN_FIX == true
+                id: changed_node
+                run: |
+                    git config --global --add safe.directory "$GITHUB_WORKSPACE"
+                    git ls-files -m > changed.txt || true
+
+                    if [ -s changed.txt ]; then
+                      echo "files<<EOF" >> "$GITHUB_OUTPUT"
+                      cat changed.txt >> "$GITHUB_OUTPUT"
+                      echo "EOF" >> "$GITHUB_OUTPUT"
+                    fi
+
+            -  name: Upload changed files
+               if: env.CAN_FIX == true && steps.changed_node.outputs.files != ''
+               uses: actions/upload-artifact@v4
+               with:
+                 name: fixes-node
+                 path: ${{ steps.changed_node.outputs.files }}
+
     pr:
         needs:
             - php
@@ -118,8 +158,15 @@ jobs:
         steps:
             -   uses: actions/checkout@v5
 
+            -   name: Download all artifacts and merge
+                uses: actions/download-artifact@v5
+                with:
+                    merge-multiple: true
+                    path: .
+
             -   name: Create a Pull Request
                 uses: peter-evans/create-pull-request@v7
+                if: ${{ !cancelled() }}
                 with:
                     branch: code-style
                     branch-suffix: random

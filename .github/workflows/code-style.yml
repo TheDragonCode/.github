@@ -35,7 +35,7 @@ jobs:
                 run: codestyle pint 8.2
 
             -   name: Normalize composer.json
-                if: ${{ env.CAN_FIX == true }}
+                if: ${{ env.CAN_FIX }} == true
                 run: composer normalize
 
             -   name: Code-style

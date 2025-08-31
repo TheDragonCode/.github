@@ -194,8 +194,7 @@ jobs:
             always() && 
             github.event_name == 'push' && 
             github.ref == 'refs/heads/main' &&
-            (needs.php.result == 'success' || needs.php.result == 'skipped') &&
-            (needs.node.result == 'success' || needs.node.result == 'skipped')
+            (needs.php.result == 'success' || needs.node.result == 'success')
 
         steps:
             -   uses: actions/checkout@v5

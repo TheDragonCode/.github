@@ -35,7 +35,7 @@ jobs:
                 run: codestyle pint 8.2
 
             -   name: Normalize composer.json
-                if: $CAN_FIX == true
+                if: env.CAN_FIX == 'true'
                 run: composer normalize
 
             -   name: Code-style
@@ -47,7 +47,7 @@ jobs:
                     fi
 
             -   name: Collect changed files
-                if: $CAN_FIX == true
+                if: env.CAN_FIX == 'true'
                 id: changed_php
                 run: |
                     git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -60,7 +60,7 @@ jobs:
                     fi
 
             -  name: Upload changed files
-               if: $CAN_FIX == true && steps.changed_php.outputs.files != ''
+               if: env.CAN_FIX == 'true' && steps.changed_php.outputs.files != ''
                uses: actions/upload-artifact@v4
                with:
                  name: fixes-php
@@ -116,7 +116,7 @@ jobs:
                     fi
 
             -   name: Remove node_modules
-                if: $CAN_FIX == true
+                if: env.CAN_FIX == 'true'
                 run: rm -rf node_modules
 
             -   name: Remove package.json
@@ -126,7 +126,7 @@ jobs:
                     rm package-lock.json
 
             -   name: Collect changed files
-                if: $CAN_FIX == true
+                if: env.CAN_FIX == 'true'
                 id: changed_node
                 run: |
                     git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -139,7 +139,7 @@ jobs:
                     fi
 
             -  name: Upload changed files
-               if: $CAN_FIX == true && steps.changed_node.outputs.files != ''
+               if: env.CAN_FIX == 'true' && steps.changed_node.outputs.files != ''
                uses: actions/upload-artifact@v4
                with:
                  name: fixes-node

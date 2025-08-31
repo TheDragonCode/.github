@@ -4,60 +4,21 @@ on:
 permissions: write-all
 
 jobs:
-    Check:
+    php:
+        name: PHP
         runs-on: ubuntu-latest
-        
-        if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/main' }}
 
         steps:
             -   uses: actions/checkout@v5
             -   uses: shivammathur/setup-php@v2
 
-            -   uses: actions/setup-node@v4
-                with:
-                    node-version: 'latest'
-
-            -   name: Install Composer dependencies
-                run: composer global require dragon-code/codestyler
-
-            -   name: Install Node dependencies
-                run: npm i -D @biomejs/biome
-
-            -   name: Publish config files
-                run: |
-                    codestyle pint 8.2
-                    codestyle npm
-
-            -   name: PHP code-style
-                run: pint --parallel --test
-
-            -   name: Node code-style
-                run: |
-                    npx @biomejs/biome lint
-                    npx @biomejs/biome format
-
-    Fix:
-        runs-on: ubuntu-latest
-        
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-
-        steps:
-            -   uses: actions/checkout@v5
-            -   uses: shivammathur/setup-php@v2
-
-            -   uses: actions/setup-node@v4
-                with:
-                    node-version: 'latest'
-
-            -   name: Detect package.json
-                id: has_pkg
+            -   name: Can fix detect
+                id: can_fix
                 shell: bash
                 run: |
-                    if [ -f package.json ]; then
-                      echo "HAS_PACKAGE_JSON=1" >> "$GITHUB_ENV"
-                    else
-                      echo "HAS_PACKAGE_JSON=0" >> "$GITHUB_ENV"
-                    fi
+                    CAN_FIX: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+                    
+                    echo "enabled=${CAN_FIX}" >> "$GITHUB_OUTPUT"
 
             -   name: Setup Composer
                 run: |
@@ -70,26 +31,74 @@ jobs:
             -   name: Install Composer dependencies
                 run: composer global require dragon-code/codestyler
 
+            -   name: Publish config files
+                run: codestyle pint 8.2
+
+            -   name: Normalize composer.json
+                if: ${{ steps.can_fix.outputs.enabled == '1' }}
+                run: composer normalize
+
+            -   name: Fix PHP code-style
+                if: ${{ steps.can_fix.outputs.enabled == '1' }}
+                run: pint --parallel
+
+            -   name: Check PHP code-style
+                if: ${{ steps.can_fix.outputs.enabled == '0' }}
+                run: pint --parallel --test
+
+    node:
+        name: Node
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v5
+            -   uses: shivammathur/setup-php@v2
+
+            -   uses: actions/setup-node@v4
+                with:
+                    node-version: 'latest'
+
+            -   name: Can fix detect
+                id: can_fix
+                shell: bash
+                run: |
+                    CAN_FIX: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+                    
+                    echo "enabled=${CAN_FIX}" >> "$GITHUB_OUTPUT"
+
+            -   name: Detect package.json
+                id: has_pkg
+                shell: bash
+                run: |
+                    if [ -f package.json ]; then
+                      echo "HAS_PACKAGE_JSON=1" >> "$GITHUB_ENV"
+                    else
+                      echo "HAS_PACKAGE_JSON=0" >> "$GITHUB_ENV"
+                    fi
+
+            -   name: Install Composer dependencies
+                run: composer global require dragon-code/codestyler
+
             -   name: Install Node dependencies
                 run: npm i -D @biomejs/biome
 
             -   name: Publish config files
-                run: |
-                    codestyle pint 8.2
-                    codestyle npm
-
-            -   name: Normalize composer.json
-                run: composer normalize
-
-            -   name: PHP code-style
-                run: pint --parallel
+                run: codestyle npm
 
             -   name: Node code-style
+                if: ${{ steps.can_fix.outputs.enabled == '1' }}
                 run: |
                     npx @biomejs/biome lint --write
                     npx @biomejs/biome format --write
 
+            -   name: Node code-style
+                if: ${{ steps.can_fix.outputs.enabled == '0' }}
+                run: |
+                    npx @biomejs/biome lint
+                    npx @biomejs/biome format
+
             -   name: Remove node_modules
+                if: ${{ steps.can_fix.outputs.enabled == '1' }}
                 run: rm -rf node_modules
 
             -   name: Remove package.json
@@ -97,6 +106,19 @@ jobs:
                 run: |
                     rm package.json
                     rm package-lock.json
+
+    pr:
+        needs:
+            - php
+            - node
+    
+        name: Create a PR
+        runs-on: ubuntu-latest
+        
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+
+        steps:
+            -   uses: actions/checkout@v5
 
             -   name: Create a Pull Request
                 uses: peter-evans/create-pull-request@v7

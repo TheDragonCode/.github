@@ -18,7 +18,6 @@ jobs:
                 run: |
                     CAN_FIX=${{ github.event_name == 'push' && github.ref == 'refs/heads/1.x' }}
 
-                    echo "$CAN_FIX"
                     echo "CAN_FIX=${CAN_FIX}" >> "$GITHUB_ENV"
 
             -   name: Setup Composer
@@ -34,6 +33,12 @@ jobs:
 
             -   name: Publish config files
                 run: codestyle pint 8.2
+
+            -   name: Checking info
+                run: |
+                    echo "CAN_FIX: $CAN_FIX"
+                    echo "env.CAN_FIX: ${{ env.CAN_FIX }}"
+                    echo ${{ env.CAN_FIX }}
 
             -   name: Normalize composer.json
                 if: env.CAN_FIX == true

@@ -35,15 +35,15 @@ jobs:
                 run: codestyle pint 8.2
 
             -   name: Normalize composer.json
-                if: ${{ env.CAN_FIX }} == 'true'
+                if: ${{ env.CAN_FIX == true }}
                 run: composer normalize
 
             -   name: Fix PHP code-style
-                if: ${{ env.CAN_FIX }} == 'true'
+                if: ${{ env.CAN_FIX == true }}
                 run: pint --parallel
 
-            -   name: Check PHP code-style
-                if: ${{ env.CAN_FIX }} == 'false'
+            -   name: Code-style
+                if: ${{ env.CAN_FIX == false }}
                 run: pint --parallel --test
 
     node:
@@ -86,19 +86,19 @@ jobs:
                 run: codestyle npm
 
             -   name: Node code-style
-                if: ${{ env.CAN_FIX }} == 'true'
+                if: ${{ env.CAN_FIX == true }}
                 run: |
                     npx @biomejs/biome lint --write
                     npx @biomejs/biome format --write
 
             -   name: Node code-style
-                if: ${{ env.CAN_FIX }} == 'false'
+                if: ${{ env.CAN_FIX == false }}
                 run: |
                     npx @biomejs/biome lint
                     npx @biomejs/biome format
 
             -   name: Remove node_modules
-                if: ${{ env.CAN_FIX }} == 'true'
+                if: ${{ env.CAN_FIX == true }}
                 run: rm -rf node_modules
 
             -   name: Remove package.json

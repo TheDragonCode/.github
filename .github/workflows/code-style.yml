@@ -35,12 +35,12 @@ jobs:
                 run: codestyle pint 8.2
 
             -   name: Normalize composer.json
-                if: ${{ env.CAN_FIX }} == true
+                if: env.CAN_FIX == 'true'
                 run: composer normalize
 
             -   name: Code-style
                 run: |
-                    if [ ${{ env.CAN_FIX }} == true ]; then
+                    if [ "$CAN_FIX" = "true" ]; then
                         pint --parallel
                     else
                         pint --parallel --test
@@ -87,7 +87,7 @@ jobs:
 
             -   name: Code-style
                 run: |
-                    if [ ${{ env.CAN_FIX }} == true ]; then
+                    if [ "$CAN_FIX" = "true" ]; then
                         npx @biomejs/biome lint --write
                         npx @biomejs/biome format --write
                     else
@@ -96,27 +96,71 @@ jobs:
                     fi
 
             -   name: Remove node_modules
-                if: ${{ env.CAN_FIX == true }}
+                if: env.CAN_FIX == 'true'
                 run: rm -rf node_modules
 
             -   name: Remove package.json
-                if: ${{ env.HAS_PACKAGE_JSON == '0' }}
+                if: env.HAS_PACKAGE_JSON == '0'
                 run: |
                     rm package.json
                     rm package-lock.json
 
     pr:
-        needs:
-            - php
-            - node
-    
         name: Create a PR
         runs-on: ubuntu-latest
         
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
         steps:
             -   uses: actions/checkout@v5
+            -   uses: shivammathur/setup-php@v2
+
+            -   uses: actions/setup-node@v4
+                with:
+                    node-version: 'latest'
+
+            -   name: Setup Composer
+                run: |
+                    composer global config --no-plugins allow-plugins.laravel/pint true
+                    composer global config --no-plugins allow-plugins.ergebnis/composer-normalize true
+                    
+                    composer config --no-plugins allow-plugins.laravel/pint true
+                    composer config --no-plugins allow-plugins.ergebnis/composer-normalize true
+
+            -   name: Install Composer dependencies
+                run: composer global require dragon-code/codestyler
+
+            -   name: Install Node dependencies
+                run: npm i -D @biomejs/biome
+
+            -   name: Publish config files
+                run: |
+                    codestyle pint 8.2
+                    codestyle npm
+
+            -   name: Detect package.json
+                id: has_pkg
+                shell: bash
+                run: |
+                    if [ -f package.json ]; then
+                      echo "HAS_PACKAGE_JSON=1" >> "$GITHUB_ENV"
+                    else
+                      echo "HAS_PACKAGE_JSON=0" >> "$GITHUB_ENV"
+                    fi
+
+            -   name: Apply code style fixes
+                run: |
+                    composer normalize
+                    pint --parallel
+                    npx @biomejs/biome lint --write
+                    npx @biomejs/biome format --write
+                    rm -rf node_modules
+
+            -   name: Remove package.json if it was added
+                if: env.HAS_PACKAGE_JSON == '0'
+                run: |
+                    rm -f package.json
+                    rm -f package-lock.json
 
             -   name: Create a Pull Request
                 uses: peter-evans/create-pull-request@v7

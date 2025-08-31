@@ -16,7 +16,7 @@ jobs:
                 id: can_fix
                 shell: bash
                 run: |
-                    CAN_FIX=${{ github.event_name == 'push' && github.ref == 'refs/heads/1.x' }}
+                    CAN_FIX=${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
                     echo "CAN_FIX=${CAN_FIX}" >> "$GITHUB_ENV"
 
@@ -82,7 +82,7 @@ jobs:
                 id: can_fix
                 shell: bash
                 run: |
-                    CAN_FIX=${{ github.event_name == 'push' && github.ref == 'refs/heads/1.x' }}
+                    CAN_FIX=${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
                     
                     echo "CAN_FIX=${CAN_FIX}" >> "$GITHUB_ENV"
 
@@ -153,7 +153,7 @@ jobs:
         name: Create a PR
         runs-on: ubuntu-latest
         
-        if: github.event_name == 'push' && github.ref == 'refs/heads/1.x'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
         steps:
             -   uses: actions/checkout@v5

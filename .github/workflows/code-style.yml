@@ -49,16 +49,27 @@ jobs:
             -   name: Collect changed files
                 if: env.CAN_FIX == 'true'
                 id: changed_php
+                shell: bash
                 run: |
-                    git config --global --add safe.directory "$GITHUB_WORKSPACE"
-                    git ls-files -m > changed.txt || true
+                  git config --global --add safe.directory "$GITHUB_WORKSPACE"
+                  git ls-files -m > changed.txt || true
 
-                    mkdir -p .artifacts
-                    while IFS= read -r f; do
-                      [ -f "$f" ] || continue
-                      mkdir -p ".artifacts/$(dirname "$f")"
-                      cp "$f" ".artifacts/$f"
-                    done < changed.txt
+                  if [ -s changed.txt ]; then
+                    echo "has_changes=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "has_changes=false" >> "$GITHUB_OUTPUT"
+                  fi
+
+            -   name: Stage changed files preserving paths
+                if: env.CAN_FIX == 'true' && steps.changed_php.outputs.has_changes == 'true'
+                shell: bash
+                run: |
+                  mkdir -p .artifacts
+                  while IFS= read -r f; do
+                    [ -f "$f" ] || continue
+                    mkdir -p ".artifacts/$(dirname "$f")"
+                    cp "$f" ".artifacts/$f"
+                  done < changed.txt
 
             -  name: Upload changed files
                if: env.CAN_FIX == 'true' && steps.changed_php.outputs.files != ''
@@ -129,16 +140,27 @@ jobs:
             -   name: Collect changed files
                 if: env.CAN_FIX == 'true'
                 id: changed_node
+                shell: bash
                 run: |
-                    git config --global --add safe.directory "$GITHUB_WORKSPACE"
-                    git ls-files -m > changed.txt || true
+                  git config --global --add safe.directory "$GITHUB_WORKSPACE"
+                  git ls-files -m > changed.txt || true
 
-                    mkdir -p .artifacts
-                    while IFS= read -r f; do
-                      [ -f "$f" ] || continue
-                      mkdir -p ".artifacts/$(dirname "$f")"
-                      cp "$f" ".artifacts/$f"
-                    done < changed.txt
+                  if [ -s changed.txt ]; then
+                    echo "has_changes=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "has_changes=false" >> "$GITHUB_OUTPUT"
+                  fi
+
+            -   name: Stage changed files preserving paths
+                if: env.CAN_FIX == 'true' && steps.changed_node.outputs.has_changes == 'true'
+                shell: bash
+                run: |
+                  mkdir -p .artifacts
+                  while IFS= read -r f; do
+                    [ -f "$f" ] || continue
+                    mkdir -p ".artifacts/$(dirname "$f")"
+                    cp "$f" ".artifacts/$f"
+                  done < changed.txt
 
             -  name: Upload changed files
                if: env.CAN_FIX == 'true' && steps.changed_node.outputs.files != ''

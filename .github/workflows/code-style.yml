@@ -4,6 +4,14 @@ on:
 permissions: write-all
 
 jobs:
+    info:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Show info
+              run: |
+                  echo ${{ github.event_name }}
+                  echo ${{ github.ref }}
+
     php:
         name: PHP
         runs-on: ubuntu-latest

@@ -1,3 +1,5 @@
+name: Checks
+
 on:
     workflow_call:
         inputs:
@@ -187,7 +189,7 @@ jobs:
             - php
             - node
     
-        name: Create a PR
+        name: PR
         runs-on: ubuntu-latest
         
         if: |

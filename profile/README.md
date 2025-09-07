@@ -12,9 +12,4 @@
 - Easy redefinition of all [responses](https://github.com/TheDragonCode/laravel-json-response) in JSON (for restful api)
 - and much more.
 
-We also have Telegram channels where we post announcements:
-
-- [English](https://t.me/dragon_code_news_en)
-- [Русский](https://t.me/dragon_code_news)
-
-And we have a [service](https://preview.dragon-code.pro) where you can choose a preview for your repository.
+Also we have a [service](https://preview.dragon-code.pro) where you can choose a preview for your repository.

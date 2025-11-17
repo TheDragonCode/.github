@@ -44,7 +44,9 @@ jobs:
                 run: composer global require dragon-code/codestyler
 
             -   name: Publish config files
-                run: codestyle pint 8.2
+                run: |
+                    codestyle pint 8.2
+                    codestyle rector default
 
             -   name: Normalize composer.json
                 if: env.CAN_FIX == 'true'
@@ -53,8 +55,10 @@ jobs:
             -   name: Code-style
                 run: |
                     if [ $CAN_FIX == true ]; then
+                        rector
                         pint --parallel
                     else
+                        rector --dry-run
                         pint --parallel --test
                     fi
 

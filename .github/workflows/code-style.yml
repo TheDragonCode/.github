@@ -21,7 +21,7 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            -   uses: actions/checkout@v5
+            -   uses: actions/checkout@v6
             -   uses: shivammathur/setup-php@v2
 
             -   name: Detecting to make changes
@@ -96,7 +96,7 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            -   uses: actions/checkout@v5
+            -   uses: actions/checkout@v6
             -   uses: shivammathur/setup-php@v2
 
             -   uses: actions/setup-node@v6
@@ -197,7 +197,7 @@ jobs:
             (needs.php.result == 'success' || needs.node.result == 'success')
 
         steps:
-            -   uses: actions/checkout@v5
+            -   uses: actions/checkout@v6
 
             -   name: Download all artifacts and merge
                 uses: actions/download-artifact@v6

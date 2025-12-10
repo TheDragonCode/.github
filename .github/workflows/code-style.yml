@@ -206,7 +206,7 @@ jobs:
                     path: .
 
             -   name: Create a Pull Request
-                uses: peter-evans/create-pull-request@v7
+                uses: peter-evans/create-pull-request@v8
                 if: ${{ !cancelled() }}
                 with:
                     branch: code-style

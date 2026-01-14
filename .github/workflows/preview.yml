@@ -12,7 +12,7 @@ permissions:
     pull-requests: write
 
 jobs:
-    Preview:
+    Update:
         runs-on: ubuntu-latest
 
         steps:

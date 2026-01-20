@@ -1,11 +1,26 @@
 name: Preview Updater
 
 on:
-  workflow_call:
+    workflow_call:
+        inputs:
+            token:
+                type: string
+                required: false
+                default: ''
+            config:
+                type: string
+                description: Path to the preview configuration YAML file.
+                required: false
+                default: ''
+            readme:
+                type: string
+                description: Specifies the path to the README file.
+                required: false
+                default: ''
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 
 permissions:
     contents: write
@@ -24,10 +39,12 @@ jobs:
                 uses: TheDragonCode/github-preview-updater@v2
                 id: preview
                 with:
-                    token: ${{ secrets.GITHUB_TOKEN }}
+                    token: ${{ inputs.token || secrets.GITHUB_TOKEN }}
+                    config: ${{ inputs.config }}
+                    readme: ${{ inputs.readme }}
 
-            - name: Merge PR
-              if: steps.preview.outputs.pullRequestNumber != ''
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: gh pr merge --merge --delete-branch ${{ steps.preview.outputs.pullRequestNumber }}
+            -   name: Merge PR
+                if: steps.preview.outputs.pullRequestNumber != ''
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                run: gh pr merge --merge --delete-branch ${{ steps.preview.outputs.pullRequestNumber }}

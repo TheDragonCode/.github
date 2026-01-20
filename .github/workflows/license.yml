@@ -2,6 +2,12 @@ name: Update license
 
 on:
   workflow_call:
+    inputs:
+      path:
+        type: string
+        description: A path or wildcard pattern specifying files to transform.
+        default: 'LICENSE'
+        required: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -18,12 +24,15 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
       - uses: FantasticFiasco/action-update-license-year@v3
         id: license
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commitTitle: 'The year in the LICENSE file has been updated'
           prTitle: 'The year in the LICENSE file has been updated'
+          path: ${{ inputs.path }}
+
       - name: Merge PR
         if: steps.license.outputs.pullRequestNumber != ''
         env:

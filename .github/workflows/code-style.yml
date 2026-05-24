@@ -207,6 +207,7 @@ jobs:
 
             -   name: Create a Pull Request
                 uses: peter-evans/create-pull-request@v8
+                id: pullRequest
                 if: ${{ !cancelled() }}
                 with:
                     branch: code-style
@@ -216,3 +217,9 @@ jobs:
                     commit-message: 🦋 The code style has been fixed
                     body: The code style has been fixed
                     labels: code-style
+
+            - name: Merge PR
+              if: steps.pullRequest.outputs.pull-request-number != ''
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: gh pr merge --merge --delete-branch ${{ steps.pullRequest.outputs.pull-request-number }}

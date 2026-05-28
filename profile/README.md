@@ -8,5 +8,3 @@
 - Convenient assistant when working with the [cache](https://github.com/TheDragonCode/laravel-cache)
 - Easy redefinition of all [responses](https://github.com/TheDragonCode/laravel-json-response) in JSON (for restful api)
 - and much more.
-
-Also we have a [service](https://preview.dragon-code.pro) where you can choose a preview for your repository.

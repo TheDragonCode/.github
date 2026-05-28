@@ -1,4 +1,4 @@
-<p align="center"><a href="https://dragon-code.pro" target="_blank"><img src="https://raw.githubusercontent.com/TheDragonCode/art/main/png/big-2026-05-28.png"></a></p>
+<p align="center"><a href="https://dragon-code.pro" target="_blank"><img src="https://raw.githubusercontent.com/TheDragonCode/art/main/previews/dragon-code.jpg"></a></p>
 
 **The Dragon Code** are powerful functional solutions with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. The Dragon Code packages takes the pain out of development by easing common tasks used in many web projects, such as:
 

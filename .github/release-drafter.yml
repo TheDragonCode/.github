@@ -9,49 +9,55 @@ sort-direction: 'ascending'
 prerelease: false
 
 categories:
+  - type: "pre-exclude"
+    when:
+      labels:
+        - 'skip-changelog'
+        - 'github_actions'
+        - 'code-style'
+        - 'dependabot'
+        - 'statuses'
+        - 'build'
   - title: 'Added'
-    labels:
-      - 'added'
+    when:
+      label: 'added'
   - title: 'Changed'
   - title: 'Removed'
-    labels:
-      - 'removed'
+    when:
+      label: 'removed'
   - title: 'Fixed'
-    labels:
-      - 'fix'
-      - 'bug'
+    when:
+      labels:
+        - 'fix'
+        - 'bug'
   - title: 'Machine translations'
     collapse-after: 20
-    labels:
-      - 'machine'
+    when:
+      label: 'machine'
   - title: 'Dependencies'
     collapse-after: 10
-    labels:
-      - 'dependencies'
+    when:
+      label: 'dependencies'
   - title: 'Security'
-    labels:
-      - 'security'
-      - 'security fix'
-      - 'security vulnerability'
-
-exclude-labels:
-  - 'skip-changelog'
-  - 'github_actions'
-  - 'code-style'
-  - 'dependabot'
-  - 'statuses'
-  - 'build'
-
-version-resolver:
-  major:
-    labels:
-      - 'major'
-      - 'removed'
-  minor:
-    labels:
-      - 'minor'
-      - 'added'
-      - 'feature'
-  default: patch
+    when:
+      labels:
+        - 'security'
+        - 'security fix'
+        - 'security vulnerability'
+  - type: "version-resolver"
+    semver-increment: "major"
+    when:
+      labels:
+        - 'major'
+        - 'removed'
+  - type: "version-resolver"
+    semver-increment: "minor"
+    when:
+      labels:
+        - 'minor'
+        - 'added'
+        - 'feature'
+  - type: "version-resolver"
+    semver-increment: "patch"
 
 template: $CHANGES
